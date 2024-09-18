@@ -12,11 +12,14 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post("backend-pearl-eight.vercel.app/api/auth/register", {
-        name,
-        email,
-        password,
-      });
+      await axios.post(
+        "https://backend-pearl-eight.vercel.app/api/auth/register",
+        {
+          name,
+          email,
+          password,
+        }
+      );
       navigate("/");
     } catch (error) {
       setError(error.response.data);
