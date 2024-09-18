@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const API_URL = `https://backend-pearl-eight.vercel.app`;
+export const API_URL = `https://backend-7yg7ehjo1-lirycas-projects.vercel.app`;
 
 const $api = axios.create({
   baseURL: API_URL,
