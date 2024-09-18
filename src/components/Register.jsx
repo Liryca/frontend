@@ -13,7 +13,7 @@ function Register() {
     e.preventDefault();
     try {
       await axios.post(
-        "https://backend-7yg7ehjo1-lirycas-projects.vercel.app/api/auth/register",
+        "https://backend-4wn28qfob-lirycas-projects.vercel.app/api/auth/register",
         {
           name,
           email,
