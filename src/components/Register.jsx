@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import axios from "axios";
 import { useNavigate, Link } from "react-router-dom";
+import { register } from "../services/auth";
 
 function Register() {
   const [name, setName] = useState("");
@@ -12,19 +12,10 @@ function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        "https://backend-4wn28qfob-lirycas-projects.vercel.app/api/auth/register",
-        {
-          name,
-          email,
-          password,
-        }
-      );
+      await register(name, email, password);
       navigate("/");
     } catch (error) {
-      setError(error.response.data);
-    } finally {
-      setTimeout(() => setError(""), 1000);
+      setError(error.response?.data);
     }
   };
 

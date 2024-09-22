@@ -116,6 +116,8 @@ function UserTable() {
     navigate("/");
   };
 
+  console.log(users);
+
   return (
     <div className="wrapper">
       {message && (
@@ -124,7 +126,7 @@ function UserTable() {
         </div>
       )}
       <div className="row w-25">
-        <p class="fs-4 col">Hello, {localStorage.getItem("user")}</p>
+        <p className="fs-4 col">Hello, {localStorage.getItem("user")}</p>
         <p onClick={logout} className=" text-primary pe-all">
           Logout
         </p>
@@ -140,50 +142,57 @@ function UserTable() {
           <img width={24} height={24} src={unLock} alt="unlock" />
         </button>
       </div>
-      <table className="table table-striped">
-        <thead>
-          <tr>
-            <th scope="col">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                checked={users.length === selectedUsers.length}
-                onChange={(e) =>
-                  setSelectedUsers(
-                    e.target.checked ? users.map((user) => user.id) : []
-                  )
-                }
-              />
-            </th>
-            <th scope="col">ID</th>
-            <th scope="col">Name</th>
-            <th scope="col">Email</th>
-            <th scope="col">Created At</th>
-            <th scope="col">Last Login</th>
-            <th scope="col">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.map((user) => (
-            <tr key={user.id}>
-              <td>
+      {!users.length && !message && (
+        <div className="row d-flex justify-content-center">
+          <div class="spinner-border  text-primary" role="status"></div>
+        </div>
+      )}
+      {users.length !== 0 && (
+        <table className="table table-striped">
+          <thead>
+            <tr>
+              <th scope="col">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  checked={selectedUsers.includes(user.id)}
-                  onChange={() => handleSelectUser(user.id)}
+                  checked={users && users.length === selectedUsers.length}
+                  onChange={(e) =>
+                    setSelectedUsers(
+                      e.target.checked ? users.map((user) => user.id) : []
+                    )
+                  }
                 />
-              </td>
-              <td>{user.id}</td>
-              <td>{user.name}</td>
-              <td>{user.email}</td>
-              <td>{moment(user.created_at).format()}</td>
-              <td>{user.last_login && moment(user.last_login).format()}</td>
-              <td>{user.status}</td>
+              </th>
+              <th scope="col">ID</th>
+              <th scope="col">Name</th>
+              <th scope="col">Email</th>
+              <th scope="col">Created At</th>
+              <th scope="col">Last Login</th>
+              <th scope="col">Status</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.map((user) => (
+              <tr key={user.id}>
+                <td>
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    checked={selectedUsers.includes(user.id)}
+                    onChange={() => handleSelectUser(user.id)}
+                  />
+                </td>
+                <td>{user.id}</td>
+                <td>{user.name}</td>
+                <td>{user.email}</td>
+                <td>{moment(user.created_at).format()}</td>
+                <td>{user.last_login && moment(user.last_login).format()}</td>
+                <td>{user.status}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      )}
     </div>
   );
 }
