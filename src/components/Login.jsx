@@ -9,19 +9,17 @@ function Login() {
   const [error, setError] = useState("");
 
   const navigate = useNavigate();
-  const { setUser } = useAuth();
+  const { setUser, setIsAuth } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await login(email, password);
-      console.log(response);
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("user", response.data.user.name);
+      setIsAuth(true);
       setUser(response.data.user);
+      sessionStorage.setItem("token", response.data.token);
       navigate("/users");
     } catch (error) {
-      console.log(error);
       setError(error?.response?.data);
     } finally {
       setTimeout(() => setError(""), 1000);
@@ -31,7 +29,7 @@ function Login() {
   return (
     <div className="row align-items-center">
       {error && (
-        <div class="alert alert-danger" role="alert">
+        <div className="alert alert-danger" role="alert">
           {error}
         </div>
       )}

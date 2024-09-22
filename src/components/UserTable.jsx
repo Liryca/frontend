@@ -11,16 +11,14 @@ import {
   unBlockUsers,
 } from "../services/users";
 import moment from "moment";
+import { shouldLogout } from "./utils";
 
 const fetchUsers = async (setUsers, logout) => {
   try {
     const res = await getUsers();
     setUsers(res.data);
   } catch (error) {
-    if (
-      error.response &&
-      (error.response.status === 403 || error.response.status === 404)
-    ) {
+    if (shouldLogout(error)) {
       logout();
     }
   }
@@ -31,7 +29,7 @@ function UserTable() {
   const [selectedUsers, setSelectedUsers] = useState([]);
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, setIsAuth } = useAuth();
 
   useEffect(() => {
     fetchUsers(setUsers, logout);
@@ -46,18 +44,13 @@ function UserTable() {
       setMessage(response.data.message);
       fetchUsers(setUsers, logout);
     } catch (error) {
-      console.log(error);
-      if (
-        error.response &&
-        (error.response.status === 403 ||
-          error.response.status === 404 ||
-          selectedUsers.includes(user.id))
-      ) {
+      if (shouldLogout(error)) {
         logout();
       }
     } finally {
       setTimeout(() => setMessage(""), 1000);
     }
+    setSelectedUsers([]);
   };
 
   const handleBlock = async () => {
@@ -69,10 +62,7 @@ function UserTable() {
       fetchUsers(setUsers, logout);
       setMessage(response.data);
     } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 403 || error.response.status === 404)
-      ) {
+      if (shouldLogout(error)) {
         logout();
       }
     } finally {
@@ -90,10 +80,7 @@ function UserTable() {
       fetchUsers(setUsers, logout);
       setMessage(response.data);
     } catch (error) {
-      if (
-        error.response &&
-        (error.response.status === 403 || error.response.status === 404)
-      ) {
+      if (shouldLogout(error)) {
         logout();
       }
     } finally {
@@ -111,12 +98,10 @@ function UserTable() {
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("user");
+    setIsAuth(false);
+    sessionStorage.removeItem("token");
     navigate("/");
   };
-
-  console.log(users);
 
   return (
     <div className="wrapper">
@@ -126,7 +111,7 @@ function UserTable() {
         </div>
       )}
       <div className="row w-25">
-        <p className="fs-4 col">Hello, {localStorage.getItem("user")}</p>
+        <p className="fs-4 col">Hello, {user?.name}</p>
         <p onClick={logout} className=" text-primary pe-all">
           Logout
         </p>
