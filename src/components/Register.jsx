@@ -15,7 +15,7 @@ function Register() {
       await register(name, email, password);
       navigate("/");
     } catch (error) {
-      setError(error.response?.data);
+      setError(error?.response?.data || "Неизвестная ошибка");
     }
   };
 

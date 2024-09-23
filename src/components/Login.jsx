@@ -8,6 +8,8 @@ function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  console.log(error);
+
   const navigate = useNavigate();
   const { setUser, setIsAuth } = useAuth();
 
@@ -20,7 +22,7 @@ function Login() {
       sessionStorage.setItem("token", response.data.token);
       navigate("/users");
     } catch (error) {
-      setError(error?.response?.data);
+      setError(error?.response?.data || "Неизвестная ошибка");
     } finally {
       setTimeout(() => setError(""), 1000);
     }
